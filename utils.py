@@ -68,7 +68,7 @@ class Recorder(object):
         # if node.num == 0:
         #     print(self.val_acc[str(node.num)])
         #     print(self.val_loss[str(node.num)])
-        print(f'节点 {node.num} 的准确率: {self.val_acc[str(node.num)]}')
+        print(f'Accuracy of Node {node.num}: {self.val_acc[str(node.num)]}')
         print(self.val_loss[str(node.num)])
 
 
