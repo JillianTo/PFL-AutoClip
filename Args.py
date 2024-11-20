@@ -66,7 +66,7 @@ def args_parser():
 
     # Optima
     parser.add_argument('--optimizer', type=str, default='sgd',
-                        help='optimizer: {sgd, adam}')
+                        help='optimizer: {sgd, adam, dgc_sgd}')
     parser.add_argument('--lr', type=float, default=0.01,
                         help='learning rate')
     parser.add_argument('--lr_step', type=int, default=10,
