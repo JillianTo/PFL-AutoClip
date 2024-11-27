@@ -55,6 +55,7 @@ def train_avg(node):
             output = node.model(data)
             loss = CE_Loss(output, target)
             loss.backward()
+            self.clipper.autoclip_gradient(node.model)
             node.optimizer.step()
             total_loss += loss
             avg_loss = total_loss / (idx + 1)
@@ -91,11 +92,13 @@ def train_mutual(node):
             loss_local = node.args.alpha * ce_local + (1 - node.args.alpha) * kl_local
             loss_global = node.args.beta * ce_global + (1 - node.args.beta) * kl_global
             loss_local.backward()
+            self.clipper.autoclip_gradient(node.model)
             loss_global.backward()
+            self.clipper.autoclip_gradient(node.global_model)
             node.optimizer.step()
             node.global_optimizer.step()
 
-            ## loss与acc计算
+            ## loss and acc calculation
             total_local_loss += loss_local
             avg_local_loss = total_local_loss / (idx + 1)
             pred_local = output_local.argmax(dim=1)
@@ -135,7 +138,9 @@ def train_coteaching(node, epoch, rate_schedule,R, args):
         node.global_optimizer.zero_grad()
 
         loss_local.backward()
+        self.clipper.autoclip_gradient(node.model)
         loss_global.backward()
+        self.clipper.autoclip_gradient(node.global_model)
         node.optimizer.step()
         node.global_optimizer.step()
 #         print(idx)
@@ -146,7 +151,7 @@ def train_coteaching(node, epoch, rate_schedule,R, args):
 #                 print(node.overlap_rate)
 #                 node.overlap_sum = 0
 
-            ## loss与acc计算
+            ## loss and acc calculation
             # total_local_loss += loss_local
             # avg_local_loss = total_local_loss / (idx + 1)
             # pred_local = output_local.argmax(dim=1)
