@@ -1,3 +1,6 @@
+# Parallel Federated Learning with AutoClipping
+Adds automatic gradient clipping to parallel federated learning. Original descriptions for each project are included below.
+
 # No One Idles: Efficient Heterogeneous Federated Learning with Parallel Edge and Server Computation
 Official implementation for paper "No One Idles: Efficient Heterogeneous Federated Learning with Parallel Edge and Server Computation", ICML 2023
 
@@ -21,6 +24,8 @@ Here is an example for PyTorch:
 ```
 python PFL.py --dataset cifar10 --node_num 10 --max_lost 3 --R 200 --E 5
 ```
+## Original Repository
+https://github.com/Hypervoyager/PFL
 # AutoClip: Adaptive Gradient Clipping
 
 This repository accompanies the [paper](https://arxiv.org/abs/2007.14469):
@@ -48,16 +53,5 @@ This work was presented at MLSP2020 in a special session. If you missed my talk,
 }
 ```
 
-
-## Training dynamics
-
-### Mask-inference loss
-
-![](images/mi.gif)
-
-### Whitened K-Means loss
-
-![](images/wkm.gif)
-
-Training dynamics of a smaller mask inference network (2 BLSTM layers with 300 hidden units) with mask-inference loss and whitened k-means loss, with and without AutoClip. The top left figure shows the norm of the step size taken on the model parameters. The top right figure shows the training loss over time, showing that AutoClip leads to better optimization. The bottom figures show the relationship between gradient norm and a measure of smoothness along the training trajectory. Statistics were recorded every 20 iterations during training.  With AutoClip, we observe a stronger correlation (r-value of .86), compared to without (r-value of .62). All gradients to the right of the dashed black line in the bottom right plot are clipped. We show the location of the AutoClip threshold at the end of training. The threshold changes during training.
-
+## Original Repository
+https://github.com/pseeth/autoclip
