@@ -61,12 +61,12 @@ def args_parser():
     parser.add_argument('--loss', type=str, default='CE',
                         help='loss:{CE, GCE}')
     parser.add_argument('--is_sparse', type=int, default=0,
-                        help='if use the sparse regularizatoin mechanism')
+                        help='if use the sparse regularization mechanism')
 
 
     # Optima
     parser.add_argument('--optimizer', type=str, default='sgd',
-                        help='optimizer: {sgd, adam, dgc_sgd}')
+                        help='optimizer: {sgd, adam}')
     parser.add_argument('--lr', type=float, default=0.01,
                         help='learning rate')
     parser.add_argument('--lr_step', type=int, default=10,
@@ -79,6 +79,8 @@ def args_parser():
                         help='local ratio of data loss')
     parser.add_argument('--beta', type=float, default=0.5,
                         help='global ratio of data loss')
+    parser.add_argument('--autoclip_percentile', type=int, default=100,
+                        help='percentile threshold for automatic gradient clipping, 100 is equivalent to not using this function')
 
     args = parser.parse_args()
     return args

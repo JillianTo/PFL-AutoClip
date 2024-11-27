@@ -5,6 +5,7 @@ import numpy as np
 from tqdm import tqdm
 from Node import Node
 # from losses import GCELoss
+from autoclip import AutoClip
 
 
 KL_Loss = nn.KLDivLoss(reduction='batchmean')
@@ -29,6 +30,7 @@ def train_normal(node):
             output = node.model(data)
             loss = CE_Loss(output, target)
             loss.backward()
+            self.clipper.autoclip_gradient(node.model)
             node.optimizer.step()
             total_loss += loss
             avg_loss = total_loss / (idx + 1)
@@ -168,6 +170,8 @@ class Trainer(object):
             self.train = train_coteaching
         elif args.algorithm == 'normal':
             self.train = train_normal
+
+        self.clipper = AutoClip(clip_percentile=args.autoclip_percentile)
 
     def __call__(self, node):
         self.train(node)

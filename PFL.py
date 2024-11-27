@@ -41,9 +41,9 @@ for rounds in range(args.R * args.node_num):
     recorder.printer(Edge_nodes[k])
     print('-------------------------')
 
-    Global_node.update(Edge_nodes[k])       # 服务器更新对应的模型参数, 注意，服务器更新的仅是其局部模型，全局模型没更新。这么做是为了避免使用中间变量
-    Edge_nodes[k].fork(Global_node)         # 节点从服务器读取全局模型后直接返回
-    Global_node.processing()                # 服务器根据其局部模型生成全局模型。可以看到中央服务器的计算过程与边缘节点是可以同时计算的。因此，可以认为是并行计算。
+    Global_node.update(Edge_nodes[k])       # The server updates the corresponding model parameters. Not that the server only updates its local model, and the global model is not updated. This is done to avoid using intermediate variables.
+    Edge_nodes[k].fork(Global_node)         # The node returns directly after reading the global model from the server
+    Global_node.processing()                # The server generates a global model based on its local model. It can be seen that the calculation process of the central server and the edge node can be calculated simultaneously. Therefore, it can be considered as parallel computing. 
 
     # log
     recorder.validate(Global_node)

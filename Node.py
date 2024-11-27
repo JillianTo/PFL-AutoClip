@@ -5,7 +5,6 @@ import torch
 # from torch.cuda import random
 import random
 import Model
-from dgc import DGC_SGD
 
 
 def init_model(model_type):
@@ -27,8 +26,6 @@ def init_optimizer(model, args):
         optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=5e-4)
     elif args.optimizer == 'adam':
         optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=1e-4)
-    elif args.optimizer == 'dgc_sgd':
-        optimizer = torch.optim.DGC_SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=5e-4)
     return optimizer
 
 
