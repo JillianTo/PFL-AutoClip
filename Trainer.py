@@ -14,7 +14,7 @@ LogSoftmax = nn.LogSoftmax(dim=1)
 CE_Loss = nn.CrossEntropyLoss()
 
 
-def train_normal(node):
+def train_normal(node, clipper):
     node.model.to(node.device).train()
     train_loader = node.train_data
     total_loss = 0.0
@@ -30,7 +30,7 @@ def train_normal(node):
             output = node.model(data)
             loss = CE_Loss(output, target)
             loss.backward()
-            self.clipper.autoclip_gradient(node.model)
+            clipper.autoclip_gradient(node.model)
             node.optimizer.step()
             total_loss += loss
             avg_loss = total_loss / (idx + 1)
@@ -39,7 +39,7 @@ def train_normal(node):
             acc = correct / len(train_loader.dataset) * 100
 
 
-def train_avg(node):
+def train_avg(node, clipper):
     node.model.to(node.device).train()
     train_loader = node.train_data
     total_loss = 0.0
@@ -55,7 +55,7 @@ def train_avg(node):
             output = node.model(data)
             loss = CE_Loss(output, target)
             loss.backward()
-            self.clipper.autoclip_gradient(node.model)
+            clipper.autoclip_gradient(node.model)
             node.optimizer.step()
             total_loss += loss
             avg_loss = total_loss / (idx + 1)
@@ -64,7 +64,7 @@ def train_avg(node):
             acc = correct / len(train_loader.dataset) * 100
 
 
-def train_mutual(node):
+def train_mutual(node, clipper):
     node.model.to(node.device).train()
     node.global_model.to(node.device).train()
     train_loader = node.train_data
@@ -92,9 +92,9 @@ def train_mutual(node):
             loss_local = node.args.alpha * ce_local + (1 - node.args.alpha) * kl_local
             loss_global = node.args.beta * ce_global + (1 - node.args.beta) * kl_global
             loss_local.backward()
-            self.clipper.autoclip_gradient(node.model)
+            clipper.autoclip_gradient(node.model)
             loss_global.backward()
-            self.clipper.autoclip_gradient(node.global_model)
+            clipper.autoclip_gradient(node.global_model)
             node.optimizer.step()
             node.global_optimizer.step()
 
@@ -138,9 +138,9 @@ def train_coteaching(node, epoch, rate_schedule,R, args):
         node.global_optimizer.zero_grad()
 
         loss_local.backward()
-        self.clipper.autoclip_gradient(node.model)
+        clipper.autoclip_gradient(node.model)
         loss_global.backward()
-        self.clipper.autoclip_gradient(node.global_model)
+        clipper.autoclip_gradient(node.global_model)
         node.optimizer.step()
         node.global_optimizer.step()
 #         print(idx)
@@ -179,7 +179,7 @@ class Trainer(object):
         self.clipper = AutoClip(clip_percentile=args.autoclip_percentile)
 
     def __call__(self, node):
-        self.train(node)
+        self.train(node, self.clipper)
 
 
 

@@ -20,7 +20,7 @@ class AutoClip():
         total_norm = total_norm ** (1. / 2)
         return total_norm 
 
-    def autoclip_gradient(model):
+    def autoclip_gradient(self, model):
         obs_grad_norm = AutoClip._get_grad_norm(model)
         self.grad_history.append(obs_grad_norm)
         clip_value = np.percentile(self.grad_history, self.clip_percentile)
